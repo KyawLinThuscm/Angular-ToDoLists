@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CreateTasksComponent } from './pages/create-tasks/create-tasks.component';
 import { EmplyoeeListsComponent } from './pages/emplyoee-lists/emplyoee-lists.component';
-
+import { AngularMaterialImportsModule } from './angular-material-imports.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +18,8 @@ import { EmplyoeeListsComponent } from './pages/emplyoee-lists/emplyoee-lists.co
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    DragDropModule
+    DragDropModule,
+    AngularMaterialImportsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
