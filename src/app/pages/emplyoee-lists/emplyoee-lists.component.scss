@@ -32,6 +32,10 @@
     color: #000;
   }
 
+  .title-div {
+    width: 70%;
+  }
+
   .mat-header-cell {
     background: #3f51b5;
     color: #fff;
@@ -43,5 +47,9 @@
   .mat-footer-cell {
     color: #000;
     border-bottom: 1px solid #ccc;
+  }
+
+  .divider {
+    margin-right: 10px;
   }
 }

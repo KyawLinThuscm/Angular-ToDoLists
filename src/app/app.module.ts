@@ -8,11 +8,18 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CreateTasksComponent } from './pages/create-tasks/create-tasks.component';
 import { EmplyoeeListsComponent } from './pages/emplyoee-lists/emplyoee-lists.component';
 import { AngularMaterialImportsModule } from './angular-material-imports.module';
+import { HeaderComponent } from './components/header/header.component';
+import { DetailComponent } from './pages/detail/detail.component';
+import { UpdateFormComponent } from './pages/update-form/update-form.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @NgModule({
   declarations: [
     AppComponent,
     CreateTasksComponent,
-    EmplyoeeListsComponent
+    EmplyoeeListsComponent,
+    DetailComponent,
+    UpdateFormComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +28,7 @@ import { AngularMaterialImportsModule } from './angular-material-imports.module'
     DragDropModule,
     AngularMaterialImportsModule
   ],
-  providers: [],
+  providers: [MatDatepickerModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

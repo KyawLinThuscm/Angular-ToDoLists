@@ -1,6 +1,60 @@
-<div class="container"></div><button type="button" class="btn btn-primary">
-  Notifications <span class="badge text-bg-secondary">4</span>
-</button>
-<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let movie of movies" cdkDrag>{{movie}}</div>
+<div class="login-container">
+  <h2>Create Task</h2>
+  <mat-card>
+    <form [formGroup]="empForm" (ngSubmit)="onSubmit()">
+      <div class="clearfix">
+        <label for="Name" class="employee" style="float: left; margin-left: 30%; padding: 20px 0px;">Emplyoee Name :
+        </label>
+        <mat-form-field appearance="outline" style="float: right; width: 20%; margin-right: 40%;">
+          <input matInput formControlName="name" placeholder="Employee Name">
+        </mat-form-field>
+      </div>
+
+      <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" formArrayName="movies">
+        <div class="example-box" *ngFor="let movie of movies.controls; let i=index" cdkDrag >
+          <div class="tasks" [formGroupName]="i">
+            <label for="Task">Task : </label>
+            <mat-form-field appearance="outline" class="divider">
+              <input matInput formControlName="task" placeholder="Task Name">
+            </mat-form-field>
+
+            <label>Start Date : </label>
+            <mat-form-field appearance="outline" class="search-form-field" class="divider">
+              <input matInput (dateInput)="OnDateChange($event.value)" [matDatepicker]="picker1"
+                placeholder="Start Date" formControlName="startdate">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <label>End Date : </label>
+            <mat-form-field appearance="outline" class="search-form-field" class="divider">
+              <input matInput [matDatepicker]="picker2" placeholder="End Date" formControlName="enddate">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+            <label for="Status">Choose Status : </label>
+            <mat-form-field appearance="outline" class="divider">
+              <mat-select formControlName="status" placeholder="Select Status">
+                <mat-option *ngFor="let status of statuss" [value]="status.viewValue">
+                  {{status.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+              <span *ngIf="i !== 0">
+                <button type="button" mat-mini-fab color="warn" (click)="remove(i)"><i
+                  class="material-icons">clear</i></button>
+              </span>
+          </div>
+
+        </div>
+        <div class="add-btn">
+          <button mat-mini-fab color="primary" type="button" (click)="add()"><i class="material-icons">add</i></button>
+        </div>
+      </div>
+      <button type="submit" mat-raised-button color="primary" class="create-btn">Create</button>
+    </form>
+  </mat-card>
 </div>
