@@ -1,10 +1,31 @@
 <div class="user-table">
   <div class="add-user-btn-container">
-    <mat-label class="search-form-label">Keyword:</mat-label>
-    <mat-form-field appearance="outline" class="search-input">
-      <input type="text" matInput name="username">
-    </mat-form-field>
-    <button mat-raised-button color="primary" class="user-btn" (click)="searchUser()">Search</button>
+    <form class="employee-search-form" (ngSubmit)="searchUser()">
+      <label class="search-form-label"> Name : </label>
+      <mat-form-field appearance="outline" class="search-form-field">
+        <input matInput type="text" name="username">
+      </mat-form-field>
+
+      <label class="search-form-label"> From : </label>
+      <mat-form-field appearance="outline" class="search-form-field">
+        <input matInput [matDatepicker]="picker1">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+
+      <label class="search-form-label"> To : </label>
+      <mat-form-field appearance="outline" class="search-form-field">
+        <input matInput [matDatepicker]="picker2">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+
+      <div class="login-btn">
+        <button type="submit" mat-raised-button color="primary">
+          Search
+        </button>
+      </div>
+    </form>
     <button mat-raised-button color="primary" class="user-btn" routerLink="/create-task">Create</button>
   </div>
 

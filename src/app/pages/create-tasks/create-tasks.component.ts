@@ -17,8 +17,28 @@ export class CreateTasksComponent implements OnInit {
   empForm!: FormGroup;
   pickDate: any;
   payload: Array<object> = [];
-  data = {};
+  id: number =  Math.floor(Math.random() * 100)
+
+
+  constructor(
+    public router: Router,
+    public fb: FormBuilder
+  ) {
+
+    this.empForm = this.fb.group({
+      id: this.id,
+      name: '',
+      movies: this.fb.array([]),
+    });
+
+  }
+
+
   drop(event: CdkDragDrop<string[]>) {
+    // console.log(this.empForm.get("movies"));
+    const formArr = this.empForm.get("movies") as FormArray;
+    console.log(formArr.controls[event.currentIndex].get("task")?.value)
+    // console.log(formArr.controls[event.previousIndex].get("task")?.value)
     // moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
 
     if (event.previousContainer === event.container) {
@@ -32,28 +52,15 @@ export class CreateTasksComponent implements OnInit {
     } else {
       // remove item from the previous list and add it to the new array
       transferArrayItem(
-        event.previousContainer.data,
+
         event.container.data,
+        event.previousContainer.data,
         event.previousIndex,
         event.currentIndex
       );
     }
 
   }
-
-
-  constructor(
-    public router: Router,
-    public fb: FormBuilder
-  ) {
-
-    this.empForm = this.fb.group({
-      id: Math.floor(Math.random() * 100),
-      name: '',
-      movies: this.fb.array([]),
-    });
-  }
-
     get movies(): FormArray {
       return this.empForm.get("movies") as FormArray
     }
@@ -83,9 +90,10 @@ export class CreateTasksComponent implements OnInit {
   }
 
   onSubmit() {
-    this.payload.push(this.empForm.value)
-    localStorage.setItem("Data", JSON.stringify(this.payload));
-    console.log(this.empForm.value);
+    let array = JSON.parse(localStorage.getItem('Data') || '[]');
+    array.push(this.empForm.value);
+    this.payload.push(this.empForm.value);
+    localStorage.setItem("Data", JSON.stringify(array));
     this.router.navigate([""]);
   }
 }

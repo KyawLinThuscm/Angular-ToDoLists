@@ -1,0 +1,104 @@
+.login-container {
+  background-color: #fff;
+  border-radius: 5px;
+  width: 96%;
+  margin: 0px auto;
+  padding: 0px 0px 20px 0px;
+
+  h2 {
+    font-weight: normal;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    background-color: #763fb5;
+    border-radius: 5px 5px 0px 0px;
+    padding: 10px 0px 10px 30px;
+    margin-bottom: 0;
+  }
+  .content {
+    width: 87%;
+    margin: 0 auto;
+    border-bottom: solid 1px #ccc;
+    color: #000000de;
+  }
+
+  label {
+    font-weight: bold;
+  }
+}
+
+.clearfix::after,
+.clearfix::before {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.divider {
+  display: inline-block;
+  margin-right: 30px;
+}
+
+
+.tasks {
+  width: 94%;
+  margin: 0 auto;
+  border-bottom: solid 1px #ccc;
+  color: #000000de;
+}
+
+.add-btn {
+  width: 92%;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.create-btn {
+  width: 20%;
+  display: block;
+  font-size: 16px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.list-item {
+  margin-right: 10px;
+}
+
+h3 {
+  display: inline-block;
+  width: 280px;
+  margin-right: 20px;
+}
+.example-box {
+  padding: 20px 0px 10px 0px;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+  clear: both;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
