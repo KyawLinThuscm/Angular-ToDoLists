@@ -47,7 +47,7 @@
         <button mat-raised-button color="primary" class="divider"  [routerLink]="['/update-form', element.id]">
           Edit
         </button>
-        <button mat-raised-button color="warn" class="divider" (click)="remove()">
+        <button mat-raised-button color="warn" class="divider" (click)="remove(element.id)">
           Delete
         </button>
 
@@ -58,7 +58,9 @@
     <tr mat-row *matRowDef="let row; columns: columnToDisplay;"></tr>
   </table>
 
-  <mat-paginator #paginator [pageSizeOptions]="pageSizes" pageSize=2 showFirstLastButtons
+  <mat-paginator [pageSizeOptions]="[2, 4, 6]" showFirstLastButtons [length]="totalSize"></mat-paginator>
+
+  <!-- <mat-paginator #paginator [pageSizeOptions]="pageSizes" pageSize=2 showFirstLastButtons
   [length]="totalSize" [pageIndex]="currentPage" (page)="handlePage($event)">
-  </mat-paginator>
+  </mat-paginator> -->
 </div>

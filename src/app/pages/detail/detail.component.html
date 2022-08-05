@@ -29,6 +29,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <button type="submit" mat-raised-button color="primary" class="create-btn">Edit</button>
+  <button type="submit" mat-raised-button color="primary" class="create-btn" (click)="edit()">Edit</button>
 
 </div>

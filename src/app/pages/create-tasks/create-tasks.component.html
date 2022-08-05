@@ -12,8 +12,8 @@
 
       <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" formArrayName="movies">
         <div class="example-box" *ngFor="let movie of movies.controls; let i=index" cdkDrag >
-
           <div class="tasks" [formGroupName]="i">
+
             <label for="Task">Task : </label>
             <mat-form-field appearance="outline" class="divider">
               <input matInput formControlName="task" placeholder="Task Name">

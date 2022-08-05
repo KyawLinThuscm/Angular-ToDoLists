@@ -3,6 +3,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-update-form',
@@ -23,6 +24,7 @@ export class UpdateFormComponent implements OnInit {
   data: any;
   employeelist = [];
   empArr: Array<object> = [];
+  empIndex: any;
   drop(event: CdkDragDrop<string[]>) {
     // moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
 
@@ -32,7 +34,6 @@ export class UpdateFormComponent implements OnInit {
         event.container.data,
         event.previousIndex,
         event.currentIndex
-
       );
     } else {
       // remove item from the previous list and add it to the new array
@@ -49,7 +50,8 @@ export class UpdateFormComponent implements OnInit {
   constructor(
     public router: Router,
     public fb: FormBuilder,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) {
     this.empForm = this.fb.group({
       id: '',
@@ -75,19 +77,19 @@ export class UpdateFormComponent implements OnInit {
     const id: number = this.activatedRoute.snapshot.params['id'];
     this.employeelist = JSON.parse(localStorage.getItem('Data') || '[]');
     this.data = this.employeelist.find(elist => elist['id'] == id)
-      this.data.movies.map((result: any) => {
-        const mvForm = this.fb.group({
-          task: result.task,
-          startdate: result.startdate,
-          enddate: result.enddate,
-          status: result.status
-        });
-        this.movies.push(mvForm);
-      })
-      this.empForm.patchValue({
-        name: this.data.name,
-        id: this.data.id
+    this.data.movies.map((result: any) => {
+      const mvForm = this.fb.group({
+        task: result.task,
+        startdate: result.startdate,
+        enddate: result.enddate,
+        status: result.status
       });
+      this.movies.push(mvForm);
+    })
+    this.empForm.patchValue({
+      name: this.data.name,
+      id: this.data.id
+    });
   }
 
 
@@ -105,12 +107,26 @@ export class UpdateFormComponent implements OnInit {
   }
 
   onSubmit() {
-    // let array = JSON.parse(localStorage.getItem('Data') || '[]');
-    // array.push(this.empForm.value);
-    this.payload.push(this.empForm.value);
-    localStorage.setItem("Data", JSON.stringify(this.payload));
-    this.router.navigate([""]);
+    const id: number = this.activatedRoute.snapshot.params['id'];
+    this.employeelist = JSON.parse(localStorage.getItem('Data') || '[]');
+    this.data = this.employeelist.find(elist => elist['id'] == id);
+    const update = this.employeelist.findIndex(a => a['id'] === this.data.id);
+    this.empIndex = this.employeelist[update];
+    this.empIndex.name = this.empForm.value.name
+    this.empIndex.movies.splice(0, this.empIndex.movies.length)
+    this.empForm.value.movies.map((res: any) => {
+      let emForm = {
+        task: res.task,
+        startdate: res.startdate,
+        enddate: res.enddate,
+        status: res.status
+      }
+      this.empIndex.movies.push(emForm);
+    })
+    localStorage.setItem("Data", JSON.stringify(this.employeelist));
+    let array = JSON.parse(localStorage.getItem('Data') || '[]');
+    this.empIndex = array[update]
+    this.location.back();
   }
-
-
 }
+

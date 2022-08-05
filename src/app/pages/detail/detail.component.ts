@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 const ELEMENT_DATA = [
@@ -25,14 +25,15 @@ export class DetailComponent implements OnInit {
   name!: string;
   data: any;
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    public router: Router
+  ) { }
 
   ngOnInit(): void {
     const id: number = this.activatedRoute.snapshot.params['id'];
     this.employeelist = JSON.parse(localStorage.getItem('Data') || '[]');
-
     this.data = this.employeelist.find(elist => elist['id'] == id)
-
     this.name = this.data.name
     this.data.movies.map((result: any) => {
       let ress = {
@@ -44,7 +45,11 @@ export class DetailComponent implements OnInit {
       this.empArr.push(ress);
     })
     this.dataSource = new MatTableDataSource<any>(this.empArr);
+  }
 
+  edit() {
+    const id: number = this.activatedRoute.snapshot.params['id'];
+    this.router.navigate(["update-form/", id]);
   }
 
 }
