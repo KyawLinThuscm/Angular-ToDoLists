@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { FormGroup, FormBuilder, FormArray, Validators, ValidatorFn, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { dateRangeValidator } from 'src/app/custom-validators/dateValidator.validator';
 @Component({
   selector: 'app-create-tasks',
   templateUrl: './create-tasks.component.html',
@@ -17,8 +18,9 @@ export class CreateTasksComponent implements OnInit {
   empForm!: FormGroup;
   pickDate: any;
   payload: Array<object> = [];
-  id: number =  Math.floor(Math.random() * 100)
-  mid: number =  Math.floor(Math.random() * 10000)
+  id: number = Math.floor(Math.random() * 100)
+  mid: number = Math.floor(Math.random() * 10000)
+  public console = console;
 
   constructor(
     public router: Router,
@@ -27,58 +29,64 @@ export class CreateTasksComponent implements OnInit {
 
     this.empForm = this.fb.group({
       id: this.id,
-      name: '',
-      movies: this.fb.array([]),
+      name: ['', Validators.required],
+      movies: this.fb.array([this.newMovie()],[Validators.required]),
+      created_at: new Date()
     });
 
   }
 
+  get movies(): FormArray {
+    return this.empForm.get("movies") as FormArray
+  }
+
+  newMovie(): FormGroup {
+    return this.fb.group({
+      task:  ['', Validators.required],
+      startdate:  ['', Validators.required],
+      enddate:  ['', [Validators.required, dateRangeValidator]],
+      status: ['', Validators.required],
+    },
+    {
+      validator: dateRangeValidator('startdate', 'enddate')
+    }
+    )
+  }
+
+
 
   drop(event: CdkDragDrop<string[]>) {
-    // console.log(this.empForm.get("movies"));
-    const formArr = this.empForm.get("movies") as FormArray;
-    console.log(formArr.controls[event.currentIndex].get("task")?.value)
-    // console.log(formArr.controls[event.previousIndex].get("task")?.value)
-    // moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
-
-    if (event.previousContainer === event.container) {
-      // change the items index if it was moved within the same list
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-
-      );
-    } else {
-      // remove item from the previous list and add it to the new array
-      transferArrayItem(
-
-        event.container.data,
-        event.previousContainer.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    }
-
+    console.log('drag drop')
+    const formArr = this.empForm.get('movies') as FormArray;
+    const from = event.previousIndex;
+    const to = event.currentIndex;
+    this.moveItemInFormArray(formArr, from, to)
   }
-    get movies(): FormArray {
-      return this.empForm.get("movies") as FormArray
+  moveItemInFormArray(formArray: FormArray, fromIndex: number, toIndex: number): void {
+    const from = this.clamp(fromIndex, formArray.length - 1);
+    const to = this.clamp(toIndex, formArray.length - 1);
+
+    if (from === to) {
+      return;
     }
 
-    newMovie(): FormGroup {
-      return this.fb.group({
-        task: '',
-        startdate: '',
-        enddate: '',
-        status: '',
-      })
-    }
+    const previous = formArray.at(from);
+    const current = formArray.at(to);
+    formArray.setControl(to, previous);
+    formArray.setControl(from, current);
+  }
+
+  clamp(value: number, max: number): number {
+    return Math.max(0, Math.min(max, value));
+  }
 
   ngOnInit(): void {
   }
 
   add() {
+    // console.log(this.movies.value)
     this.movies.push(this.newMovie());
+    console.log(this.movies.value)
   }
 
   remove(i: number) {

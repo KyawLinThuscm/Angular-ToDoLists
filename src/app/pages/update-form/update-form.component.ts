@@ -26,25 +26,30 @@ export class UpdateFormComponent implements OnInit {
   empArr: Array<object> = [];
   empIndex: any;
   drop(event: CdkDragDrop<string[]>) {
-    // moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
+    console.log('drop event triggers')
+    const formArr = this.empForm.get('movies') as FormArray;
+    const from = event.previousIndex;
+    const to = event.currentIndex;
+    this.moveItemInFormArray(formArr, from, to)
 
-    if (event.previousContainer === event.container) {
-      // change the items index if it was moved within the same list
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      // remove item from the previous list and add it to the new array
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+  }
+
+  moveItemInFormArray(formArray: FormArray, fromIndex: number, toIndex: number): void {
+    const from = this.clamp(fromIndex, formArray.length - 1);
+    const to = this.clamp(toIndex, formArray.length - 1);
+
+    if (from === to) {
+      return;
     }
 
+    const previous = formArray.at(from);
+    const current = formArray.at(to);
+    formArray.setControl(to, previous);
+    formArray.setControl(from, current);
+  }
+
+  clamp(value: number, max: number): number {
+    return Math.max(0, Math.min(max, value));
   }
 
   constructor(

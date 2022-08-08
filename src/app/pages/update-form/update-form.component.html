@@ -11,7 +11,7 @@
       </div>
 
       <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" formArrayName="movies">
-        <div class="example-box" *ngFor="let movie of movies.controls; let i=index" cdkDrag >
+        <div class="example-box" *ngFor="let movie of movies.controls; let i=index" cdkDrag>
           <div class="tasks" [formGroupName]="i">
             <label for="Task">Task : </label>
             <mat-form-field appearance="outline" class="divider">
@@ -41,8 +41,10 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-                <button type="button" mat-mini-fab color="warn" (click)="remove(i)"><i
+            <span *ngIf="i !== 0">
+              <button type="button" mat-mini-fab color="warn" (click)="remove(i)"><i
                   class="material-icons">clear</i></button>
+            </span>
           </div>
 
         </div>
