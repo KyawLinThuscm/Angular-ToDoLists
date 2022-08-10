@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { FormGroup, FormBuilder, FormArray, Validators, ValidatorFn, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { dateRangeValidator } from 'src/app/custom-validators/dateValidator.validator';
+import * as moment from 'moment';
 @Component({
   selector: 'app-create-tasks',
   templateUrl: './create-tasks.component.html',
@@ -26,12 +27,11 @@ export class CreateTasksComponent implements OnInit {
     public router: Router,
     public fb: FormBuilder
   ) {
-
     this.empForm = this.fb.group({
       id: this.id,
       name: ['', Validators.required],
       movies: this.fb.array([this.newMovie()],[Validators.required]),
-      created_at: new Date()
+      created_at: moment(new Date()).format('YYYY/MM/DD')
     });
 
   }
@@ -84,9 +84,7 @@ export class CreateTasksComponent implements OnInit {
   }
 
   add() {
-    // console.log(this.movies.value)
     this.movies.push(this.newMovie());
-    console.log(this.movies.value)
   }
 
   remove(i: number) {

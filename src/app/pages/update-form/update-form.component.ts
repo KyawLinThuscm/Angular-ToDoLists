@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, FormArray, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { dateRangeValidator } from 'src/app/custom-validators/dateValidator.validator';
 
 @Component({
   selector: 'app-update-form',
@@ -26,7 +27,6 @@ export class UpdateFormComponent implements OnInit {
   empArr: Array<object> = [];
   empIndex: any;
   drop(event: CdkDragDrop<string[]>) {
-    console.log('drop event triggers')
     const formArr = this.empForm.get('movies') as FormArray;
     const from = event.previousIndex;
     const to = event.currentIndex;
@@ -60,8 +60,8 @@ export class UpdateFormComponent implements OnInit {
   ) {
     this.empForm = this.fb.group({
       id: '',
-      name: '',
-      movies: this.fb.array([]),
+      name: ['', Validators.required],
+      movies: this.fb.array([],[Validators.required]),
     });
   }
 
@@ -71,11 +71,15 @@ export class UpdateFormComponent implements OnInit {
 
   newMovie(): FormGroup {
     return this.fb.group({
-      task: '',
-      startdate: '',
-      enddate: '',
-      status: '',
-    })
+      task:  ['', Validators.required],
+      startdate:  ['', Validators.required],
+      enddate:  ['', [Validators.required, dateRangeValidator]],
+      status: ['', Validators.required],
+    },
+    {
+      validator: dateRangeValidator('startdate', 'enddate')
+    }
+    )
   }
 
   ngOnInit(): void {
@@ -84,11 +88,15 @@ export class UpdateFormComponent implements OnInit {
     this.data = this.employeelist.find(elist => elist['id'] == id)
     this.data.movies.map((result: any) => {
       const mvForm = this.fb.group({
-        task: result.task,
-        startdate: result.startdate,
-        enddate: result.enddate,
-        status: result.status
-      });
+        task: [ result.task, Validators.required],
+        startdate: [ result.startdate,Validators.required ],
+        enddate: [ result.enddate, [Validators.required, dateRangeValidator]],
+        status: [ result.status, Validators.required]
+      },
+      {
+        validator: dateRangeValidator('startdate', 'enddate')
+      }
+      );
       this.movies.push(mvForm);
     })
     this.empForm.patchValue({

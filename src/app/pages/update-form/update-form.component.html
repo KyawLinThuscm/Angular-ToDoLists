@@ -7,6 +7,7 @@
         </label>
         <mat-form-field appearance="outline" style="float: right; width: 20%; margin-right: 40%;">
           <input matInput formControlName="name" placeholder="Employee Name">
+          <mat-error *ngIf="empForm.controls['name']?.errors?.['required']">Name can't be blank.</mat-error>
         </mat-form-field>
       </div>
 
@@ -16,6 +17,9 @@
             <label for="Task">Task : </label>
             <mat-form-field appearance="outline" class="divider">
               <input matInput formControlName="task" placeholder="Task Name">
+              <mat-error *ngIf="movies.controls[i].get('task')?.errors?.['required'] " class="error">
+                Task required.
+              </mat-error>
             </mat-form-field>
 
             <label>Start Date : </label>
@@ -24,6 +28,9 @@
                 placeholder="Start Date" formControlName="startdate">
               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
+              <mat-error *ngIf="movies.controls[i].get('startdate')?.errors?.['required'] " class="error">
+                Start Date required.
+              </mat-error>
             </mat-form-field>
 
             <label>End Date : </label>
@@ -31,6 +38,12 @@
               <input matInput [matDatepicker]="picker2" placeholder="End Date" formControlName="enddate">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
+              <mat-error *ngIf="movies.controls[i].get('enddate')?.errors?.['required']" class="error">
+                End Date required.
+              </mat-error>
+              <mat-error *ngIf="movies.controls[i].get('enddate')?.errors?.['err']" class="error">
+                End Date must be less than Start date.
+              </mat-error>
             </mat-form-field>
 
             <label for="Status">Choose Status : </label>
@@ -40,7 +53,11 @@
                   {{status.viewValue}}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="movies.controls[i].get('status')?.errors?.['required'] " class="error">
+                Status required.
+              </mat-error>
             </mat-form-field>
+
             <span *ngIf="i !== 0">
               <button type="button" mat-mini-fab color="warn" (click)="remove(i)"><i
                   class="material-icons">clear</i></button>
@@ -52,7 +69,7 @@
           <button mat-mini-fab color="primary" type="button" (click)="add()"><i class="material-icons">add</i></button>
         </div>
       </div>
-      <button type="submit" mat-raised-button color="primary" class="create-btn">Create</button>
+      <button type="submit" mat-raised-button color="primary" class="create-btn" [disabled]="empForm.invalid">Create</button>
     </form>
   </mat-card>
 </div>

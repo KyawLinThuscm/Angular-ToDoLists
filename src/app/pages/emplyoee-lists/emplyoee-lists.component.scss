@@ -2,7 +2,7 @@
   margin: 0 10px;
   .add-user-btn-container {
     float: right;
-    width: 65%;
+    width: 68%;
     margin-top: 15px;
     margin-right: 25px;
     ::ng-deep .mat-form-field-flex > .mat-form-field-infix {
@@ -44,7 +44,8 @@
   }
 
   .title-div {
-    width: 70%;
+    width: 40%;
+    cursor: pointer;
   }
 
   .mat-header-cell {
