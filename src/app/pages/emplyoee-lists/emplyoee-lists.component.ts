@@ -9,7 +9,7 @@ import * as moment from 'moment';
   styleUrls: ['./emplyoee-lists.component.scss']
 })
 export class EmplyoeeListsComponent implements OnInit {
-  dataSource!: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   public columnToDisplay = [
     'name',
     'created_at',
@@ -18,8 +18,7 @@ export class EmplyoeeListsComponent implements OnInit {
   pageSizes = 2;
   currentPage = 0;
   totalSize = 0;
-  employeelist = [];
-  empArr: Array<object> = [];
+  employeelist: any = [];
   data: any;
   name = "";
   fromDate: any;
@@ -29,14 +28,14 @@ export class EmplyoeeListsComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngOnInit(): void {
-    this.employeelist = JSON.parse(localStorage.getItem('Data') || '[]');
-    this.dataSource = new MatTableDataSource<any>(this.employeelist);
-    this.dataSource.paginator = this.paginator;
-    this.totalSize = this.employeelist.length;
+  async ngOnInit() {
+
+    this.employeelist = await JSON.parse(localStorage.getItem('Data') || '[]');
+    this.getEmployee(this.employeelist);
   }
 
-  public getEmployee() {
+  public getEmployee(data=null) {
+    this.employeelist = data ? data : this.employeelist;
     this.dataSource = new MatTableDataSource<any>(this.employeelist);
     this.dataSource.paginator = this.paginator;
     this.totalSize = this.employeelist.length;
@@ -44,21 +43,11 @@ export class EmplyoeeListsComponent implements OnInit {
 
   public searchUser() {
     if (!this.name && !this.fromDate && !this.toDate) {
-      this.employeelist.map((result: any) => {
-        return {
-          id: result.id,
-          name: result.name,
-          movies: result.movies,
-          created_at: result.created_at
-        }
-      })
-      this.dataSource = new MatTableDataSource<any>(this.employeelist);
-      this.dataSource.paginator = this.paginator;
-      this.totalSize = this.employeelist.length;
+      this.getEmployee()
 
     } else if (this.name && !this.fromDate && !this.toDate) {
       const ename = this.name;
-      const seachName = this.employeelist.filter(function (e) {
+      const seachName = this.employeelist.filter(function (e: any) {
         return e['name'] === ename;
       });
       this.dataSource = new MatTableDataSource<any>(seachName);
@@ -68,7 +57,7 @@ export class EmplyoeeListsComponent implements OnInit {
     } else if (!this.name && this.fromDate && this.toDate) {
       const from = moment(this.fromDate).format('YYYY/MM/DD');
       const to = moment(this.toDate).format('YYYY/MM/DD');
-      const fromto = this.employeelist.filter(function (e) {
+      const fromto = this.employeelist.filter(function (e: any) {
         return e['created_at'] >= from && e['created_at'] <= to
       });
       this.dataSource = new MatTableDataSource<any>(fromto);
@@ -78,7 +67,7 @@ export class EmplyoeeListsComponent implements OnInit {
     } else if (!this.name && this.fromDate && !this.toDate) {
       const from = moment(this.fromDate).format('YYYY/MM/DD');
       const to = moment(new Date()).format('YYYY/MM/DD');
-      const fromOnly = this.employeelist.filter(function (e) {
+      const fromOnly = this.employeelist.filter(function (e: any) {
         return e['created_at'] >= from && e['created_at'] <= to
       });
       this.dataSource = new MatTableDataSource<any>(fromOnly);
@@ -87,7 +76,7 @@ export class EmplyoeeListsComponent implements OnInit {
 
     } else if (!this.name && !this.fromDate && this.toDate) {
       const to = moment(this.toDate).format('YYYY/MM/DD');
-      const toOnly = this.employeelist.filter(function (e) {
+      const toOnly = this.employeelist.filter(function (e: any) {
         return e['created_at'] <= to
       });
       this.dataSource = new MatTableDataSource<any>(toOnly);
@@ -98,7 +87,7 @@ export class EmplyoeeListsComponent implements OnInit {
       const ename = this.name;
       const from = moment(this.fromDate).format('YYYY/MM/DD');
       const to = moment(new Date()).format('YYYY/MM/DD');
-      const nameFrom = this.employeelist.filter(function (e) {
+      const nameFrom = this.employeelist.filter(function (e: any) {
         return e['name'] === ename && e['created_at'] >= from && e['created_at'] <= to
       });
       this.dataSource = new MatTableDataSource<any>(nameFrom);
@@ -108,7 +97,7 @@ export class EmplyoeeListsComponent implements OnInit {
     } else if (this.name && !this.fromDate && this.toDate) {
       const ename = this.name;
       const to = moment(this.toDate).format('YYYY/MM/DD');
-      const nameTo = this.employeelist.filter(function (e) {
+      const nameTo = this.employeelist.filter(function (e: any) {
         return e['name'] === ename && e['created_at'] <= to
       });
       this.dataSource = new MatTableDataSource<any>(nameTo);
@@ -120,7 +109,7 @@ export class EmplyoeeListsComponent implements OnInit {
         const ename = this.name;
         const from = moment(this.fromDate).format('YYYY/MM/DD');
         const to = moment(this.toDate).format('YYYY/MM/DD');
-        const all = this.employeelist.filter(function (e) {
+        const all = this.employeelist.filter(function (e: any) {
           return e['name'] === ename && e['created_at'] >= from && e['created_at'] <= to
         });
         this.dataSource = new MatTableDataSource<any>(all);
@@ -132,10 +121,9 @@ export class EmplyoeeListsComponent implements OnInit {
 
   public remove(id: any) {
     this.employeelist = JSON.parse(localStorage.getItem('Data') || '[]');
-    this.data = this.employeelist.find(elist => elist['id'] == id);
-    this.employeelist.splice(this.employeelist.findIndex(a => a['id'] === this.data.id), 1);
+    this.data = this.employeelist.find((elist: any) => elist['id'] == id);
+    this.employeelist.splice(this.employeelist.findIndex((a: any) => a['id'] === this.data.id), 1);
     localStorage.setItem("Data", JSON.stringify(this.employeelist));
-    this.getEmployee();
-    location.reload();
+    this.getEmployee(this.employeelist);
   }
 }

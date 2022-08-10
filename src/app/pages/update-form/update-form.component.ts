@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { dateRangeValidator } from 'src/app/custom-validators/dateValidator.validator';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-update-form',
@@ -130,8 +131,8 @@ export class UpdateFormComponent implements OnInit {
     this.empForm.value.movies.map((res: any) => {
       let emForm = {
         task: res.task,
-        startdate: res.startdate,
-        enddate: res.enddate,
+        startdate: moment(res.startdate).format('YYYY/MM/DD'),
+        enddate: moment(res.enddate).format('YYYY/MM/DD'),
         status: res.status
       }
       this.empIndex.movies.push(emForm);

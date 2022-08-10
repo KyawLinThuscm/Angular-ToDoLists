@@ -56,7 +56,6 @@ export class CreateTasksComponent implements OnInit {
 
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log('drag drop')
     const formArr = this.empForm.get('movies') as FormArray;
     const from = event.previousIndex;
     const to = event.currentIndex;
